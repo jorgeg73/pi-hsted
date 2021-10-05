@@ -1,0 +1,21 @@
+  version: "2.1"
+ services:
+  transmission:
+    image: linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=998
+      - PGID=100
+      - TZ=America/Tijuana
+      - TRANSMISSION_WEB_HOME=/combustion-release/ #optional
+      - USER=ent #optional
+      - PASS=ent1 #optional
+    volumes:
+      - /srv/dev-disk-by-label-docker/config/transmission:/config
+      - /srv/dev-disk-by-label-principal/compartir/Torrent_complete:/downloads
+      - /srv/dev-disk-by-label-principal/compartir/Torrent_complete:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped

@@ -1,0 +1,29 @@
+version: "2.1"
+services:
+  readarr:
+    container_name: readarr
+    image: 'hotio/readarr:nightly'
+    ports:
+      - '8787:8787'
+    environment:
+      - PUID=998
+      - PGID=100
+      - TZ=America/Tijuana
+    volumes:
+      - '/srv/dev-disk-by-label-docker/config/readarr:/config'
+      - '/srv/dev-disk-by-label-principal/readarr/server:/data'
+    restart: unless-stopped
+
+readarr-audio-books:
+    container_name: readarr-audio-books
+    image: 'hotio/readarr:nightly'
+    ports:
+      - '8786:8787'
+    environment:
+      - PUID=998
+      - PGID=100
+      - TZ=America/Tijuana
+    volumes:
+      - '/srv/dev-disk-by-label-docker/config/readarr-audio-books:/config'
+      - '/srv/dev-disk-by-label-principal/readarr/server:/data'
+    restart: unless-stopped

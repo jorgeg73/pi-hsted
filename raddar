@@ -1,0 +1,16 @@
+version: "2.1"
+services:
+  radarr:
+    image: ghcr.io/linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=998
+      - PGID=100
+      - TZ=America/Tijuana
+    volumes:
+      - /srv/dev-disk-by-label-docker/config/radarr:/config
+      - /srv/dev-disk-by-label-principal/infor:/infor #optional
+      
+    ports:
+      - 7878:7878
+    restart: unless-stopped

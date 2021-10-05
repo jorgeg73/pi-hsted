@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+  db:
+    image: mariadb:10
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: supersecret
+      MYSQL_USER: vikunja
+      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: vikunja
+    volumes:
+      - ./db:/var/lib/mysql
+    restart: unless-stopped
+  api:
+    image: vikunja/api
+    environment:
+      VIKUNJA_DATABASE_HOST: db
+      VIKUNJA_DATABASE_PASSWORD: secret
+      VIKUNJA_DATABASE_TYPE: mysql
+      VIKUNJA_DATABASE_USER: vikunja
+      VIKUNJA_DATABASE_DATABASE: vikunja
+      VIKUNJA_SERVICE_FRONTENDURL: https://your-frontend-url.com/
+      VIKUNJA_SERVICE_ENABLETASKATTACHMENTS: 1
+      VIKUNJA_SERVICE_ENABLEREGISTRATION: 0
+      VIKUNJA_SERVICE_ENABLEEMAILREMINDERS: 1
+      VIKUNJA_MAILER_ENABLED: 1
+      VIKUNJA_MAILER_FORCESSL: 1
+      VIKUNJA_MAILER_HOST: smtp.gmail.com
+      VIKUNJA_MAILER_PORT: 465
+      VIKUNJA_MAILER_USERNAME: youremail@gmail.com
+      VIKUNJA_MAILER_PASSWORD: yourgmailpassword
+    volumes: 
+      - ./files:/app/vikunja/files
+    depends_on:
+      - db
+    restart: unless-stopped
+  frontend:
+    image: vikunja/frontend
+    restart: unless-stopped
+  proxy:
+    image: nginx
+    ports:
+      - 8022:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+      - frontend
+    restart: unless-stopped
+
+
+
+    crear otro archivo donde se cree el vikunja como nginx.conf y poner
+
+    server {
+    listen 80;
+
+    location / {
+        proxy_pass http://frontend:80;
+    }
+
+    location ~* ^/(api|dav|\.well-known)/ {
+        proxy_pass http://api:3456;
+        client_max_body_size 20M;
+    }
+}

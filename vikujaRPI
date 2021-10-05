@@ -1,0 +1,41 @@
+version: '2.1'
+
+services:
+  mariadb:
+    image: yobasystems/alpine-mariadb:latest
+    container_name: vikunja_mariadb
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: 7373jorge
+      MYSQL_USER: vikunja
+      MYSQL_PASSWORD: 7373jorge
+      MYSQL_DATABASE: vikunja
+    volumes:
+      - /srv/dev-disk-by-label-Disco3/basededatos/vikunja:/var/lib/mysql
+    restart: unless-stopped
+  api:
+    image: vikunja/api
+    environment:
+      VIKUNJA_DATABASE_HOST: mariadb
+      VIKUNJA_DATABASE_PASSWORD: 7373jorge
+      VIKUNJA_DATABASE_TYPE: mysql
+      VIKUNJA_DATABASE_USER: vikunja
+      VIKUNJA_DATABASE_DATABASE: vikunja
+    volumes: 
+      - /srv/dev-disk-by-label-principal/vikunja:/app/vikunja/files
+    depends_on:
+      - mariadb
+    restart: unless-stopped
+  frontend:
+    image: vikunja/frontend
+    restart: unless-stopped
+  proxy:
+    image: nginx
+    ports:
+      - 8022:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+      - frontend
+    restart: unless-stopped

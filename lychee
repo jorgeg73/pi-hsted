@@ -1,0 +1,36 @@
+version: "2.1"
+services:
+  mariadb:
+    image: yobasystems/alpine-mariadb:latest
+    container_name: lychee_mariadb
+    restart: always
+    volumes:
+      - /srv/dev-disk-by-label-Disco3/basededatos/Lychee:/config
+    environment:
+      - MYSQL_ROOT_PASSWORD=xxxxx
+      - MYSQL_DATABASE=lychee
+      - MYSQL_USER=lychee
+      - MYSQL_PASSWORD=xxxx
+      - PGID=100
+      - PUID=998
+      - TZ=America/Tijuana
+  lychee:
+    image: ghcr.io/linuxserver/lychee:latest
+    container_name: lychee
+    restart: always
+    depends_on:
+      - mariadb
+    volumes:
+      - /srv/dev-disk-by-label-docker/config/Lychee:/config
+      - /srv/dev-disk-by-label-Disco3/respaldofotos:/pictures
+    environment:
+      - DB_HOST=mariadb
+      - DB_USERNAME=lychee
+      - DB_PASSWORD=7373jorge
+      - DB_DATABASE=lychee
+      - DB_PORT=3306
+      - PGID=100
+      - PUID=998
+      - TZ=America/Tijuana
+    ports:
+      - 8134:80

@@ -1,0 +1,15 @@
+version: "2.1"
+services:
+  mstream:
+    image: ghcr.io/linuxserver/mstream
+    container_name: mstream
+    environment:
+      - PUID=998
+      - PGID=100
+      - TZ=America/Tijuana
+    volumes:
+      - /srv/dev-disk-by-label-docker/config/mstream:/config
+      - /srv/dev-disk-by-label-principal/mstream/music:/music
+    ports:
+      - 3000:3000
+    restart: unless-stopped

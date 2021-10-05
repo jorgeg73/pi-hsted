@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  db:
+    image: yobasystems/alpine-mariadb:latest
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    volumes:
+      - /srv/dev-disk-by-label-Disco3/basededatos/nextcloud:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=7373jorge #Change This
+      - MYSQL_PASSWORD=7373jorge #Change This
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+
+  app:
+    image: nextcloud
+    ports:
+      - 8085:80
+    links:
+      - db
+    volumes:
+      - /srv/dev-disk-by-label-docker/config/nextcloud:/var/www/html #Change 'nextcloud' to your external drive volume if available
+    restart: always
+
+    #sofipos
+
