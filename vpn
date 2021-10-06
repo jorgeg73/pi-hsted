@@ -1,0 +1,18 @@
+docker create \
+  --name=wireguard \
+  --cap-add=NET_ADMIN \
+  --cap-add=SYS_MODULE \
+  -e PUID=998 \
+  -e PGID=100 \
+  -e TZ=America/Tijuana \
+  -e SERVERURL=vpn.famvillagom.cyou \
+  -e SERVERPORT=51820 \
+  -e PEERS=1 \
+  -e PEERDNS=auto \
+  -e INTERNAL_SUBNET=10.13.13.0\
+  -p 51820:51820/udp \
+  -v /srv/dev-disk-by-label-docker/config/wireguard:/config \
+  -v /lib/modules:/lib/modules \
+  --sysctl="net.ipv4.conf.all.src_valid_mark=1" \
+  --restart unless-stopped \
+  linuxserver/wireguard

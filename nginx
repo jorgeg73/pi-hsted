@@ -1,0 +1,45 @@
+#crear archivo config.json
+
+
+{
+"database": {
+"engine": "mysql",
+"host": "db",
+"name": "DBNAME",
+"user": "admin",
+"password": "7373jorge",
+"port": 3306
+}
+}
+
+
+
+
+#crear archivo docker-compose.yml
+
+version: "3"
+services:
+  app:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-proxy-manager
+    volumes:
+      - ./config.json:/app/config/production.json
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    depends_on:
+      - db
+    ports:
+      - 80:80
+      - 443:443
+      - 83:81
+    restart: unless-stopped
+  db:
+    image: yobasystems/alpine-mariadb:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 7373jorge
+      MYSQL_DATABASE: DBNAME
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 7373jorge
+    volumes:
+      - /srv/dev-disk-by-label-docker/config/NGINXDB:/var/lib/mysql

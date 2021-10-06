@@ -1,0 +1,29 @@
+version: '2.1'
+
+services:
+
+  wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 84:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: jorgeg73
+      WORDPRESS_DB_PASSWORD: 7373jorge
+      WORDPRESS_DB_NAME: exampledb
+    volumes:
+      - /srv/dev-disk-by-label-docker/config/WordPress:/var/www/html
+    links:
+      - db:db
+
+  db:
+    image: yobasystems/alpine-mariadb:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: jorgeg73
+      MYSQL_PASSWORD: 7373jorge
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - /srv/dev-disk-by-label-Disco3/basededatos/WordPress:/var/lib/mysql

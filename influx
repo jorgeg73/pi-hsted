@@ -1,0 +1,10 @@
+docker run -p 8086:8086 \
+      -v /srv/dev-disk-by-label-docker/config/influxdb:/var/lib/influxdb \
+      -v /srv/dev-disk-by-label-docker/influxdb.conf:/etc/influxdb/nfluxdb.conf \
+      influxdb:1.8
+
+
+
+
+
+/srv/dev-disk-by-label-docker/config#

@@ -1,0 +1,19 @@
+version: "2.1"
+services:
+  syncthing:
+    image: linuxserver/syncthing
+    container_name: syncthing
+    environment:
+      - PUID=998
+      - PGID=100
+      - TZ=America/Tijuana
+      - UMASK_SET=022
+    volumes:
+      - /srv/dev-disk-by-label-Disco3/syncthing:/config
+      - /srv/dev-disk-by-label-Disco3/syncthing:/data1
+      - /srv/dev-disk-by-label-Disco3/syncthing:/data2
+    ports:
+      - 8384:8384
+      - 22000:22000
+      - 21027:21027/udp
+    restart: unless-stopped

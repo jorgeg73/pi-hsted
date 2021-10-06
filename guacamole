@@ -1,0 +1,13 @@
+docker run \
+  -p 9001:8080 \
+  -v /srv/dev-disk-by-label-Docker/guacamole:/config \
+  oznu/guacamole:armhf
+
+
+  docker exec -it b9079670ff61  /bin/bash
+
+
+  docker run \
+  -p 8091:8080 \
+  -v /srv/dev-disk-by-label-Docker/guacamole:/config \
+  oznu/guacamole:armhf

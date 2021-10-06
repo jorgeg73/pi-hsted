@@ -1,0 +1,40 @@
+#crear archivo config.json
+
+
+{
+"database": {
+"engine": "mysql",
+"host": "db",
+"name": "DBNAME",
+"user": "jorge",
+"password": "7373jorge",
+"port": 3306
+}
+}
+
+
+
+
+#crear archivo docker-compose.yml
+
+version: "2.1"
+services:
+  duplicati:
+    image: linuxserver/duplicati
+    container_name: duplicati
+    environment:
+      - PUID=998
+      - PGID=100
+      - TZ=America/Tijuana
+    volumes:
+      - /srv/dev-disk-by-label-docker/config/Duplicati:/config #Config Files
+      - /srv/8df656b9-2887-48c1-80c9-0e7deef58d54/duplicati:/BackupStorage #Backup Storage
+      - /srv/dev-disk-by-label-docker/config:/ConfigBackup #What to Backup
+      - /srv/dev-disk-by-label-Disco3/basededatos:/DatabaseBackup #What to Backup
+    ports:
+      - 8200:8200
+    restart: unless-stopped
+
+
+
+    
